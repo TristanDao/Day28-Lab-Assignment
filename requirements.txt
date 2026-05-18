@@ -1,0 +1,10 @@
+# Requirements for Day 28 Lab Local Scripts, Prefect Flow Deployments, and Smoke Tests
+prefect>=3.0.0
+kafka-python-ng>=2.2.3
+pandas>=2.1.0
+pyarrow>=14.0.0
+redis>=5.0.1
+qdrant-client>=1.7.0
+langsmith>=0.1.0
+pytest>=7.4.3
+requests>=2.31.0

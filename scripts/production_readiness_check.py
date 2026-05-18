@@ -47,14 +47,20 @@ print("\n=== FEATURE STORE ===")
 check("Redis reachable", lambda:
     redis.Redis(host="localhost", port=6379).ping())
 
-print("\n=== KAFKA ===")
 def check_kafka_topics():
-    result = subprocess.run(
-        ["docker", "exec", "lab28-kafka-1", "kafka-topics", "--list",
-         "--bootstrap-server", "localhost:9092"],
-        capture_output=True, text=True
-    )
-    assert "data.raw" in result.stdout
+    errors = []
+    for container in ["day28-lab-assignment-kafka-1", "lab28-kafka-1"]:
+        try:
+            result = subprocess.run(
+                ["docker", "exec", container, "kafka-topics", "--list",
+                 "--bootstrap-server", "localhost:9092"],
+                capture_output=True, text=True, check=True
+            )
+            if "data.raw" in result.stdout:
+                return
+        except Exception as e:
+            errors.append(f"{container}: {e}")
+    raise AssertionError(f"Could not verify Kafka topics. Errors: {errors}")
 
 check("Kafka topics exist", check_kafka_topics)
 
